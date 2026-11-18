@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111a24">
+  <title>Mühle – gegen die Quanten-KI</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="game-engine.js"></script>
+  <script defer src="quantum-ai.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Mühle Startseite">
+        <span class="brand-mark" aria-hidden="true">✳</span>
+        <span>MÜHLE<span class="brand-dot">.</span></span>
+      </a>
+      <span class="edition">KLASSISCHES STRATEGIESPIEL</span>
+      <button class="new-game-button" id="new-game" type="button">Neues Spiel <span aria-hidden="true">↗</span></button>
+    </header>
+
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow"><span class="eyebrow-line"></span> STRATEGIE TRIFFT QUANTENWELT</p>
+      <h1 id="page-title">Drei in einer Reihe.<br><span>Unendlich viele Möglichkeiten.</span></h1>
+      <p class="intro-copy">Das zeitlose Mühlespiel – gegen eine KI, die in Möglichkeiten denkt.</p>
+    </section>
+
+    <section class="play-area" aria-label="Mühlespiel">
+      <div class="board-wrap">
+        <div class="board-heading">
+          <div>
+            <p class="section-label">DAS SPIELFELD</p>
+            <h2>Dein nächster Zug</h2>
+          </div>
+          <span class="round-badge" id="phase-badge">AUFSTELLEN</span>
+        </div>
+        <div class="board-frame">
+          <svg class="board" id="board" viewBox="0 0 600 600" role="group" aria-label="Mühle-Spielbrett">
+            <g class="board-lines" aria-hidden="true"></g>
+            <g class="board-points"></g>
+          </svg>
+        </div>
+        <div class="board-footer">
+          <span class="turn-indicator"><i id="turn-dot"></i><span id="turn-label">Du bist am Zug</span></span>
+          <span class="board-hint" id="board-hint">Setze einen Stein auf einen freien Punkt.</span>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <section class="player-card human-card" id="human-card">
+          <div class="player-topline">
+            <div class="player-avatar human-avatar" aria-hidden="true">D</div>
+            <div><p class="player-type">DU SPIELST</p><h3>Du</h3></div>
+            <span class="player-state" id="human-state">BEREIT</span>
+          </div>
+          <div class="piece-count"><strong id="human-count">9</strong><span>Steine übrig</span></div>
+          <div class="piece-track" id="human-track" aria-label="Deine Steine"></div>
+        </section>
+
+        <div class="versus" aria-hidden="true"><span></span><b>VS</b><span></span></div>
+
+        <section class="player-card ai-card" id="ai-card">
+          <div class="player-topline">
+            <div class="player-avatar ai-avatar" aria-hidden="true"><span>✳</span></div>
+            <div><p class="player-type">DEIN GEGNER</p><h3>Quanten-KI</h3></div>
+            <span class="player-state" id="ai-state">BEREIT</span>
+          </div>
+          <div class="piece-count"><strong id="ai-count">9</strong><span>Steine übrig</span></div>
+          <div class="piece-track" id="ai-track" aria-label="Steine der Quanten-KI"></div>
+        </section>
+
+        <section class="quantum-note">
+          <div class="quantum-icon" aria-hidden="true">⌘</div>
+          <div><h4>Hybrid-Quanten-KI</h4><p>Klassische Zugbewertung trifft auf echte simulierte Quantengatter.</p></div>
+          <span class="info-mark" title="Lokale Statevector-Simulation; keine Quantenhardware">i</span>
+        </section>
+
+        <section class="difficulty-control">
+          <div>
+            <label for="difficulty">KI-SCHWIERIGKEIT</label>
+            <p id="difficulty-description">Verstärkt gute Züge mit Grover-Iterationen.</p>
+          </div>
+          <select id="difficulty" name="difficulty">
+            <option value="easy">Leicht</option>
+            <option value="medium" selected>Mittel</option>
+            <option value="hard">Schwer</option>
+          </select>
+        </section>
+
+        <section class="circuit-panel" aria-labelledby="circuit-title">
+          <div class="circuit-header">
+            <div>
+              <p class="player-type">LIVE · LOKALER QUANTENSIMULATOR</p>
+              <h4 id="circuit-title">Grover-Quantenschaltkreis</h4>
+            </div>
+            <span class="circuit-status" id="circuit-status">BEREIT</span>
+          </div>
+          <div class="circuit-count"><strong id="circuit-candidate-count">–</strong><span>mögliche Züge</span></div>
+          <div class="circuit-meta" aria-label="Schaltkreisdetails">
+            <span><strong id="circuit-qubits">–</strong> QUBITS</span>
+            <span><strong id="circuit-gate-count">–</strong> GATTER</span>
+            <span><strong id="circuit-marked-count">–</strong> ZIELZUSTÄNDE</span>
+            <span><strong id="circuit-iterations">–</strong> GROVER-RUNDEN</span>
+          </div>
+          <div class="circuit-scroll" id="circuit-scroll">
+            <svg class="circuit-diagram" id="circuit-diagram" viewBox="0 0 500 90" role="img" aria-labelledby="circuit-title circuit-caption"></svg>
+          </div>
+          <p class="circuit-progress" id="circuit-progress">Noch kein Schaltkreis ausgeführt.</p>
+          <p class="circuit-key">H Hadamard · X Pauli-X · O<sub>f</sub> Phasenorakel · Z Diffusion · M Messung</p>
+          <p class="circuit-caption" id="circuit-caption" aria-live="polite">Warte auf den nächsten KI-Zug.</p>
+          <p class="circuit-disclaimer">Echte Gattersimulation im Browser (Statevector, Pseudozufallsmessung); keine Quantenhardware.</p>
+        </section>
+
+        <button class="rules-toggle" id="rules-toggle" type="button" aria-expanded="false" aria-controls="rules-panel">
+          <span>Wie spielt man Mühle?</span><span class="rules-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <div class="rules-panel" id="rules-panel" hidden>
+          <p>Setze abwechselnd je neun Steine. Drei eigene Steine auf einer Linie bilden eine Mühle – dann darfst du einen gegnerischen Stein entfernen. Sind alle Steine gesetzt, ziehst du entlang einer Linie. Mit nur drei Steinen darfst du springen. Wer den Gegner auf zwei Steine reduziert oder bewegungsunfähig macht, gewinnt.</p>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="page-footer">
+      <span>KLASSISCHES MÜHLE · NEU GEDACHT</span>
+      <span>Eine kleine Spielerei aus der Quantenwelt <i aria-hidden="true">✳</i></span>
+    </footer>
+  </main>
+</body>
+</html>
